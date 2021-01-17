@@ -4,7 +4,7 @@ RSpec.describe "Cohort Import" do
   let(:user) { create(:user) }
   let(:cohort_csv) { "tmp/cohort_import_test.csv" }
 
-  let(:enclosure) { build(:enclosure) }
+  let(:enclosure) { create(:enclosure, organization: user.organization, location: create(:location)) }
   let(:cohort1) { build(:cohort, enclosure: enclosure) }
   let(:cohort2) { build(:cohort, enclosure: enclosure) }
 
@@ -23,7 +23,8 @@ RSpec.describe "Cohort Import" do
     ]
   end
 
-  before do
+  before(:each) do
+    sign_in user
     CSV.open(cohort_csv, "wb") do |csv|
       rows.each do |row|
         csv << row
@@ -31,11 +32,9 @@ RSpec.describe "Cohort Import" do
     end
   end
 
-  before(:each) { sign_in user }
-
   after(:each) { File.delete(cohort_csv) }
 
-  describe 'valid csv' do
+  describe "valid csv" do
     let(:csv) { CSV.open(cohort_csv, "r") }
 
     it "has headers and a row", :aggregate_failures do
@@ -49,18 +48,21 @@ RSpec.describe "Cohort Import" do
     end
   end
 
-  it "creates cohort from a CSV file", :aggregate_failures do
-    visit new_cohort_import_path
-    attach_file("cohort_csv", cohort_csv)
-    click_on "Submit"
+  describe "from CSV file" do
+    it "creates a cohort", :aggregate_failures do
+      visit new_cohort_import_path
+      attach_file("cohort_csv", cohort_csv)
+      click_on "Submit"
 
-    cohort = Cohort.first
+      cohort = Cohort.first
 
-    expect(cohort.organization_id).to eql(user.organization.id)
-    expect(cohort.name).to eq cohort1.name
-    expect(cohort.female_tag).to eq cohort1.female_tag
-    expect(cohort.male_tag).to eq cohort1.male_tag
-    expect(cohort.enclosure.name).to eq cohort1.enclosure.name
-    expect(cohort.enclosure.location.name).to eq cohort1.location.name
+      expect(page).to have_current_path(cohorts_path)
+      expect(cohort.organization_id).to eql(user.organization.id)
+      expect(cohort.name).to eq cohort1.name
+      expect(cohort.female_tag).to eq cohort1.female_tag
+      expect(cohort.male_tag).to eq cohort1.male_tag
+      expect(cohort.enclosure.name).to eq enclosure.name
+      expect(cohort.enclosure.location.name).to eq enclosure.location.name
+    end
   end
 end
