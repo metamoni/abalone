@@ -292,7 +292,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    semantic_range (2.3.0)
+    semantic_range (2.3.1)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
     spreadsheet (1.2.6)
@@ -321,7 +321,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webpacker (5.2.1)
+    webpacker (6.0.0.pre.2)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -375,7 +375,7 @@ DEPENDENCIES
   shoulda-matchers
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
-  webpacker (~> 5.x)
+  webpacker (~> 6.pre)
 
 RUBY VERSION
    ruby 2.6.6p146
