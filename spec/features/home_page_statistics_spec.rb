@@ -22,7 +22,7 @@ RSpec.describe 'Home Page Statistics' do
       sign_in user
       visit root_path
 
-      expect(page.all('h1')[1].text).to eq('Your organization: White Abalone')
+      expect(page.find('h2').text).to eq('Your organization: White Abalone')
       expect(page.all('.card-content')[0].find('.title').text).to eq('1') # Total No. of Animals
       expect(page.all('.card-content')[1].find('.title').text).to eq('1') # No. of Facilities
       expect(page.all('.card-content')[2].find('.title').text).to eq('1') # No. of Cohorts
